@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops Playbooks — Incident Response, On-Call & Deployment Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #533afd;
+  --purple-hover: #4434d4;
+  --navy: #061b31;
+  --slate: #64748d;
+  --dark-slate: #273951;
+  --border: #e5edf5;
+  --border-purple: #b9b9f9;
+  --brand-dark: #1c1e54;
+  --white: #ffffff;
+  --green: #15be53;
+  --green-text: #108c3d;
+  --shadow-blue: rgba(50,50,93,0.25);
+  --shadow-black: rgba(0,0,0,0.1);
+  --shadow-ambient: rgba(23,23,23,0.08);
+  --ruby: #ea2261;
+  --bg-off: #f8fafc;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 300;
+  color: var(--navy);
+  background: var(--white);
+  line-height: 1.4;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* Nav */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo { font-weight: 600; font-size: 18px; color: var(--navy); letter-spacing: -0.2px; }
+.nav-logo span { color: var(--purple); }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--purple); color: var(--white);
+  padding: 7px 16px; border-radius: 4px;
+  font-size: 14px; font-weight: 400; text-decoration: none;
+  transition: background 0.15s;
+}
+.nav-cta:hover { background: var(--purple-hover); }
+
+/* Hero */
+.hero {
+  padding: 88px 0 64px;
+  text-align: center;
+}
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 13px; font-weight: 400; color: var(--purple);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  margin-bottom: 16px;
+  background: rgba(83,58,253,0.06);
+  padding: 3px 10px; border-radius: 4px;
+}
+.hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 300; letter-spacing: -0.96px;
+  line-height: 1.08; color: var(--navy);
+  max-width: 720px; margin: 0 auto 20px;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--purple), #7c5cfc);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: 18px; font-weight: 300; color: var(--slate);
+  max-width: 560px; margin: 0 auto 32px; line-height: 1.55;
+}
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-block; background: var(--purple); color: var(--white);
+  padding: 12px 28px; border-radius: 4px;
+  font-size: 16px; font-weight: 400; text-decoration: none;
+  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow-blue) 0px 4px 12px -6px;
+}
+.btn-primary:hover { background: var(--purple-hover); }
+.btn-ghost {
+  display: inline-block; background: transparent; color: var(--purple);
+  padding: 11px 27px; border-radius: 4px;
+  font-size: 16px; font-weight: 400; text-decoration: none;
+  border: 1px solid var(--border-purple);
+  transition: background 0.15s;
+}
+.btn-ghost:hover { background: rgba(83,58,253,0.04); }
+
+/* Testimonial strip */
+.trust-strip {
+  padding: 0 0 56px; text-align: center;
+  font-size: 14px; color: var(--slate);
+}
+.trust-strip a { color: var(--purple); text-decoration: none; }
+
+/* Products section */
+.products {
+  padding: 0 0 80px;
+}
+.products h2 {
+  font-size: 13px; font-weight: 400; color: var(--purple);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+.products-intro {
+  font-size: 24px; font-weight: 300; color: var(--navy);
+  letter-spacing: -0.3px; margin-bottom: 40px; max-width: 520px;
+}
+.product-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.product-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 32px 28px 28px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.product-card:hover {
+  border-color: var(--border-purple);
+  box-shadow: var(--shadow-blue) 0px 30px 45px -30px, var(--shadow-black) 0px 18px 36px -18px;
+}
+.product-card h3 {
+  font-size: 20px; font-weight: 300; color: var(--navy);
+  letter-spacing: -0.2px; margin-bottom: 6px;
+}
+.product-card .price {
+  font-size: 28px; font-weight: 300; color: var(--navy);
+  margin-bottom: 12px;
+}
+.product-card .price span { font-size: 15px; color: var(--slate); }
+.product-card .desc {
+  font-size: 15px; color: var(--slate); line-height: 1.5;
+  margin-bottom: 16px;
+}
+.product-card .includes {
+  list-style: none; padding: 0; margin-bottom: 20px;
+}
+.product-card .includes li {
+  font-size: 14px; color: var(--dark-slate); padding: 4px 0;
+  position: relative; padding-left: 18px;
+}
+.product-card .includes li::before {
+  content: ''; position: absolute; left: 0; top: 9px;
+  width: 6px; height: 6px; border-radius: 2px;
+  background: var(--green);
+}
+.product-card .btn-buy {
+  display: inline-block; width: 100%; text-align: center;
+  background: var(--purple); color: var(--white);
+  padding: 10px 0; border-radius: 4px;
+  font-size: 15px; font-weight: 400; text-decoration: none;
+  transition: background 0.15s;
+}
+.product-card .btn-buy:hover { background: var(--purple-hover); }
+
+/* Bundle card */
+.product-card.bundle {
+  border-color: var(--border-purple);
+  background: var(--bg-off);
+  position: relative;
+}
+.product-card.bundle::before {
+  content: 'Best value'; position: absolute; top: -11px; right: 20px;
+  background: var(--green); color: var(--white);
+  font-size: 11px; font-weight: 400; padding: 2px 10px; border-radius: 4px;
+}
+
+/* Dark section */
+.dark-section {
+  background: var(--brand-dark);
+  padding: 80px 0;
+  color: var(--white);
+}
+.dark-section h2 {
+  font-size: 32px; font-weight: 300; letter-spacing: -0.6px;
+  margin-bottom: 16px;
+}
+.dark-section p {
+  font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.7);
+  max-width: 540px; line-height: 1.55; margin-bottom: 32px;
+}
+.dark-features {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.dark-feature {
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px; padding: 24px;
+}
+.dark-feature h4 {
+  font-size: 17px; font-weight: 300; color: var(--white);
+  margin-bottom: 6px;
+}
+.dark-feature p {
+  font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 0;
+}
+
+/* FAQ */
+.faq {
+  padding: 80px 0;
+}
+.faq h2 {
+  font-size: 24px; font-weight: 300; color: var(--navy);
+  letter-spacing: -0.3px; margin-bottom: 40px;
+}
+.faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px 40px; }
+.faq-item h4 { font-size: 16px; font-weight: 400; color: var(--navy); margin-bottom: 6px; }
+.faq-item p { font-size: 14px; color: var(--slate); line-height: 1.55; }
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
+  font-size: 13px; color: var(--slate);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+footer a { color: var(--purple); text-decoration: none; }
+
+@media (max-width: 640px) {
+  .hero { padding: 56px 0 40px; }
+  .hero h1 { font-size: 30px; letter-spacing: -0.6px; }
+  .dark-section { padding: 48px 0; }
+  .dark-section h2 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-logo">Ops<span>Playbooks</span></div>
+    <a href="#buy" class="nav-cta">Get the templates &rarr;</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Digital templates for operations teams</div>
+    <h1>Runbooks that don't <em>suck</em></h1>
+    <p>Most teams under 50 people have zero documented procedures. When something breaks at 2 AM, nobody knows who to call or what to do. These templates fix that — in about an hour.</p>
+    <div class="hero-actions">
+      <a href="#buy" class="btn-primary">See the templates</a>
+      <a href="#what" class="btn-ghost">What's included</a>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip container">
+  Written by someone who's been paged at 2 AM more times than they'd like. Used by teams at early-stage startups, agencies, and internal ops groups.
+</div>
+
+<section class="products container" id="buy">
+  <h2>Choose a template</h2>
+  <p class="products-intro">Pick what you need, or grab all three. Each one ships as a Google Doc you can copy, edit, and share in minutes.</p>
+  <div class="product-grid">
+    <div class="product-card">
+      <h3>Incident Response Runbook</h3>
+      <div class="price">$49 <span>one-time</span></div>
+      <p class="desc">When your payment processor goes down at 11 PM on a Saturday, this is the doc you want already sitting in your team's shared drive.</p>
+      <ul class="includes">
+        <li>Severity classification (SEV-1 through SEV-4)</li>
+        <li>Escalation paths and on-call rotation template</li>
+        <li>Incident commander role checklist</li>
+        <li>Postmortem template (blameless)</li>
+        <li>Communication templates (internal + customer-facing)</li>
+      </ul>
+      <a href="https://gumroad.com/l/incident-response-runbook" class="btn-buy">Buy for $49</a>
+    </div>
+
+    <div class="product-card">
+      <h3>On-Call Handoff Template</h3>
+      <div class="price">$29 <span>one-time</span></div>
+      <p class="desc">The Monday morning handoff where nothing gets communicated? Solved. Structured format that takes 5 minutes to fill out and covers everything the next person needs.</p>
+      <ul class="includes">
+        <li>Weekly handoff document structure</li>
+        <li>Active incident tracker</li>
+        <li>Pending changes / deploy log</li>
+        <li>Alert noise review section</li>
+        <li>Team health check prompts</li>
+      </ul>
+      <a href="https://gumroad.com/l/oncall-handoff-template" class="btn-buy">Buy for $29</a>
+    </div>
+
+    <div class="product-card">
+      <h3>Deployment Checklist</h3>
+      <div class="price">$19 <span>one-time</span></div>
+      <p class="desc">Stop treating every deploy like a new adventure. A checklist that covers pre-deploy verification, rollout phases, monitoring windows, and rollback triggers — adapted from what teams running production at scale actually use.</p>
+      <ul class="includes">
+        <li>Pre-deploy verification checklist</li>
+        <li>Canary / phased rollout steps</li>
+        <li>Monitoring dashboard checklist</li>
+        <li>Rollback decision tree</li>
+        <li>Post-deploy validation prompts</li>
+      </ul>
+      <a href="https://gumroad.com/l/deployment-checklist" class="btn-buy">Buy for $19</a>
+    </div>
+
+    <div class="product-card bundle">
+      <h3>Ops Starter Kit</h3>
+      <div class="price">$79 <span>one-time</span></div>
+      <p class="desc">All three templates in one pack. If you're building an ops function from scratch or overhauling what you have, this covers the basics in a weekend.</p>
+      <ul class="includes">
+        <li>Incident Response Runbook ($49 value)</li>
+        <li>On-Call Handoff Template ($29 value)</li>
+        <li>Deployment Checklist ($19 value)</li>
+        <li>Bonus: SaaS Vendor Audit Spreadsheet</li>
+      </ul>
+      <a href="https://gumroad.com/l/ops-starter-kit" class="btn-buy">Buy for $79</a>
+    </div>
+  </div>
+</section>
+
+<section class="dark-section" id="what">
+  <div class="container">
+    <h2>What you actually get</h2>
+    <p>No video course. No "community." No subscription. Just documents you can use today.</p>
+    <div class="dark-features">
+      <div class="dark-feature">
+        <h4>Google Doc format</h4>
+        <p>Open, copy, edit. No special software. Works with what your team already uses.</p>
+      </div>
+      <div class="dark-feature">
+        <h4>Written by an operator</h4>
+        <p>Not a consultant who's never been on-call. These templates come from someone who's carried a pager for real production systems.</p>
+      </div>
+      <div class="dark-feature">
+        <h4>Adaptable, not prescriptive</h4>
+        <p>Every section has notes on what to change for your team size, stack, and culture. These are starting points, not dogma.</p>
+      </div>
+      <div class="dark-feature">
+        <h4>Free updates</h4>
+        <p>If we improve a template, you get the new version. No charge, no subscription. We'll email you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq container">
+  <h2>Questions people ask before buying</h2>
+  <div class="faq-grid">
+    <div class="faq-item">
+      <h4>Are these actual documents or just outlines?</h4>
+      <p>Full documents with real content. Each template is 8–15 pages of structured, fill-in-the-blanks content. You're not buying bullet points.</p>
+    </div>
+    <div class="faq-item">
+      <h4>What if my team is only 3 people?</h4>
+      <p>They work better for small teams. Large companies have dedicated SRE teams writing this stuff from scratch. Small teams need the head start.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Can I share these with my whole company?</h4>
+      <p>Yes. One purchase covers your entire team. No seat licenses, no per-user fees.</p>
+    </div>
+    <div class="faq-item">
+      <h4>What if I don't like them?</h4>
+      <p>Email within 14 days. Full refund. I'd rather you have useful runbooks than $49.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="container">
+  <span>OpsPlaybooks &copy; 2026</span>
+  <span><a href="mailto:ops@aerial.systems">ops@aerial.systems</a></span>
+</footer>
+
+</body>
+</html>
